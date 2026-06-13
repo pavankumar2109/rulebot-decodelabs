@@ -4,21 +4,6 @@
 #  File       : chatbot.py
 #  Author     : PAVAN KUMAR
 #  Date       : 2026
-# ============================================================
-#
-#  ARCHITECTURE  →  IPO Model (from the DecodeLabs PPT)
-#  ┌─────────┐     ┌──────────────────────┐     ┌──────────┐
-#  │  INPUT  │────▶│  PROCESS             │────▶│  OUTPUT  │
-#  │ Raw text│     │  Sanitize + Match    │     │ Response │
-#  └─────────┘     └──────────────────────┘     └──────────┘
-#
-#  ENGINE  →  Dictionary O(1) Lookup   (NOT if-elif ladder)
-#  WHY?    →  if-elif = O(n), slows down with more rules
-#             dict.get() = O(1), instant regardless of size
-# ============================================================
-
-
-# ── KNOWLEDGE BASE ───────────────────────────────────────────
 # This is the "brain" of the chatbot.
 # It's a Python dictionary → key = intent, value = response.
 #
@@ -45,7 +30,7 @@ RESPONSES = {
     # ── Identity ───────────────────────────────────────────
     "who are you"  : "I'm RuleBot 🤖 — a rule-based chatbot built using a Python dictionary. No ML, no magic. Just clean rules!",
     "your name"    : "My name is RuleBot v1.0. Nice to meet you!",
-    "who made you" : "I was built as DecodeLabs AI Project 1 — Batch 2026!",
+    "who made you" : "I was built as DecodeLabs AI Task 1 — Batch 2026!",
 
     # ── Help ───────────────────────────────────────────────
     "help"         : (
@@ -95,19 +80,8 @@ EXIT_KEYWORDS = {"bye", "goodbye", "quit", "exit", "cya", "see you"}
 # Shown when no rule matches. Always have a fallback!
 FALLBACK = "🤔 I don't understand that yet. Type 'help' to see what I know."
 
-
-# ════════════════════════════════════════════════════════════
 #  PHASE 1 — INPUT SANITIZATION
-#  (from the DecodeLabs PPT: "Sanitization & Normalization")
-#
-#  Problem: "Hello", "HELLO", " hello " are the same word
-#           but Python sees them as 3 different strings.
-#  Fix   : .lower()  → converts to lowercase
-#           .strip() → removes leading/trailing spaces
-#
-#  raw  = input('You: ')          → "  HELLO  "
-#  clean = raw.lower().strip()    → "hello"
-# ════════════════════════════════════════════════════════════
+
 
 def sanitize(raw_input):
     """
@@ -118,17 +92,8 @@ def sanitize(raw_input):
     clean_input = raw_input.lower().strip()
     return clean_input
 
-
-# ════════════════════════════════════════════════════════════
 #  PHASE 2 — PROCESS: INTENT MATCHING
-#  (from the DecodeLabs PPT: "Intent Matching & State")
-#
-#  The .get() method is the key technique here.
-#  RESPONSES.get(key, default)
-#    → if key exists  : returns the response
-#    → if key missing : returns the fallback (default)
-#  This is ONE atomic operation — lookup + fallback together.
-# ════════════════════════════════════════════════════════════
+
 
 def get_response(clean_input):
     """
@@ -156,18 +121,7 @@ def get_response(clean_input):
 
 
 # ════════════════════════════════════════════════════════════
-#  PHASE 3 — THE INFINITE LOOP (The Heartbeat)
-#  (from the DecodeLabs PPT: "The Heartbeat: The Infinite Loop")
-#
-#  while True:               ← runs forever
-#      get input             ← Phase 1
-#      if exit command → break  ← Kill Command
-#      process input         ← Phase 2
-#      print response        ← Phase 3 (Output)
-#
-#  The loop only stops when the user types an EXIT keyword.
-#  This is called a "Kill Command" — a controlled break.
-# ════════════════════════════════════════════════════════════
+#  PHASE 3 — THE INFINITE LOOP 
 
 def run_chatbot():
     """
@@ -208,11 +162,6 @@ def run_chatbot():
         # ── PHASE 3: OUTPUT (Response Generation) ────────
         print(f"  Bot : {response}\n")
 
-
-# ── ENTRY POINT ───────────────────────────────────────────────
-# This block only runs when you execute THIS file directly.
-# It does NOT run if another file imports this one.
-# Best practice: always protect your main code with this guard.
 
 if __name__ == "__main__":
     run_chatbot()
