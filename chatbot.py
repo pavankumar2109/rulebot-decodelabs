@@ -2,7 +2,7 @@
 #  DecodeLabs · Batch 2026 · Artificial Intelligence
 #  Project 1  : Rule-Based AI Chatbot
 #  File       : chatbot.py
-#  Author     : <your name>
+#  Author     : PAVAN KUMAR
 #  Date       : 2026
 # ============================================================
 #
